@@ -1,0 +1,47 @@
+.container-1{
+
+    width: 75%;
+    margin: 0 auto;
+    text-align: center;
+    border: 1px solid black;
+}
+.flex-box-blackjack-row-1,.flex-box-blackjack-row-2{
+     display: flex;
+     flex-direction: row;
+     flex-wrap: wrap;
+     padding: 10px;
+     justify-content: space-around;
+     border: 1px solid rgb(206, 29, 29);
+     background-image: linear-gradient(rgb(139, 199, 171), rgb(191, 245, 177),rgb(115, 202, 93));
+
+}
+.flex-box-blackjack-row-1 div{
+    flex:1;
+    text-align: center; 
+    flex-wrap: wrap;   
+    height: 350px;
+    padding: 10px;
+    border: 1px solid rgb(206, 29, 126);
+    
+}
+
+.flex-box-blackjack-row-2 div{
+  
+    text-align: center;
+    padding: 10px;
+    border: 1px solid rgb(29, 100, 206);
+}
+.flex-box-blackjack-row-1 img{
+    
+    width: 25%;
+    margin:10px;
+  
+}
+.flex-box-blackjack-row-1 img:hover{
+   
+    box-shadow: 0 10px 50px rgb(8, 61, 206);
+}
+table , th , td {
+    border :1px solid black;
+    padding: 5px;
+}
