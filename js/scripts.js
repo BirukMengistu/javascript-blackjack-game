@@ -7,10 +7,10 @@
     "dealer":{"scoreSpan": "#dealer-result",
              "div":"#dealer-box","score":0},
 
-     "cards":["2","3","4","5"," 6","7","8","9","10","K","Q","J","A"],
-     "cardsMap":{"2":2,"3":3,"4":4,"5":5,"6":6,"7":7,"8":8, 
-                "9":9, "10":10,"J":10,"k":10, "Q":10 , "A":[1,11]}
- } 
+     "cards":['2','3','4','5','6','7','8','9','10','K','Q','J','A'],
+     "cardsMap":{'2':2,'3':3,'4':4,'5':5,'6':6,'7':7,'8':8, 
+                '9':9,'10':10,'K': 10,'Q': 10, 'J': 10 , 'A': [ 1 , 11 ]}
+ }; 
     
 const PLAYER = cardGame['player'];
 const DEALER = cardGame['dealer'];
@@ -28,10 +28,9 @@ btnDeal.addEventListener('click' ,CardDeal)
 
 function cardHit(){
     let card = randomCard();
-   showCard(PLAYER,card) ;
-   updateScore(card,PLAYER)
-   showScore(PLAYER);
-   console.log(PLAYER['score']);
+    showCard(PLAYER,card) ;
+    updateScore(card,PLAYER);
+    bustGame(PLAYER);
     
 }
 
@@ -65,13 +64,44 @@ function removeImage(PlayerImage , dealerImage)
 function randomCard()
 {
    let randomIndex= Math.floor(Math.random()*13);
+   console.log(randomIndex)
+  // console.log(cardGame['cards'][randomIndex])
    return cardGame['cards'][randomIndex];
+
 }
 function updateScore(card, activePlayer)
 {
- activePlayer['score'] += cardGame['cardsMap'][card]
+    //by defualt As card has to value , so base on the rules As will charge 11 if 
+    //the cards score below 10 As value 11 other wise As value 1.
+    if(card === 'A'){
+        if(activePlayer['score'] + cardGame['cardsMap'][card][1] <= 21){
+            activePlayer['score'] += cardGame['cardsMap'][card][1];
+        }
+       else{
+            activePlayer['score'] += cardGame['cardsMap'][card][0];
+        }
+
+    }
+    else{
+        activePlayer['score'] += cardGame['cardsMap'][card]
+    }
+   
+ 
 }
 
 function showScore(activePlayer){
 document.querySelector(activePlayer['scoreSpan']).textContent = activePlayer['score'];
+}
+
+function bustGame(activePlayer){
+ if(activePlayer['score'] > 21)
+ {
+    document.querySelector(activePlayer['scoreSpan']).textContent = 'bust'
+    document.querySelector(activePlayer['scoreSpan']).style.color = 'red'
+    document.querySelector('#btn-cardGame-hit').disabled = true;
+ }
+
+ 
+ else
+ showScore(activePlayer);
 }
