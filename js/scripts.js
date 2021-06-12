@@ -21,7 +21,7 @@ const btnStand = document.querySelector('#btn-cardGame-stand');
 const btnDeal = document.querySelector('#btn-cardGame-deal');
 
 btnHit.addEventListener('click' , cardHit)
-btnStand.addEventListener('click' , cardStand)
+btnStand.addEventListener('click' ,dealerLogic)
 btnDeal.addEventListener('click' ,CardDeal)
 
 
@@ -105,3 +105,11 @@ function bustGame(activePlayer){
  else
  showScore(activePlayer);
 }
+
+function dealerLogic(){
+    let card = randomCard();
+    showCard(DEALER,card) ;
+    updateScore(card,DEALER);
+    bustGame(DEALER);
+}
+
