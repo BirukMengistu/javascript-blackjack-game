@@ -9,12 +9,20 @@
 
      "cards":['2','3','4','5','6','7','8','9','10','K','Q','J','A'],
      "cardsMap":{'2':2,'3':3,'4':4,'5':5,'6':6,'7':7,'8':8, 
-                '9':9,'10':10,'K': 10,'Q': 10, 'J': 10 , 'A': [ 1 , 11 ]}
- }; 
+                '9':9,'10':10,'K': 10,'Q': 10, 'J': 10 , 'A': [ 1 , 11 ]},
+ 
+     "win": 0,
+     "loss":0,
+      "draw":0,
+
+ 
+            }; 
     
 const PLAYER = cardGame['player'];
 const DEALER = cardGame['dealer'];
 const hitSound = new Audio('sounds/swish.m4a');
+const winSound = new Audio('sounds/cash.mp3');
+const lossSound = new Audio('sounds/aww.mp3');
 
 const btnHit = document.querySelector('#btn-cardGame-hit');
 const btnStand = document.querySelector('#btn-cardGame-stand');
@@ -31,6 +39,7 @@ function cardHit(){
     showCard(PLAYER,card) ;
     updateScore(card,PLAYER);
     bustGame(PLAYER);
+
     
 }
 
@@ -45,20 +54,33 @@ function cardStand(){
 }
 
 function CardDeal(){
+    showResult( computerWinner())
+   
     let playerImage = document.querySelector('#player-box').querySelectorAll('img');
     let dealerImage = document.querySelector('#dealer-box').querySelectorAll('img') ;
-    
+    document.querySelector('#player-result').textContent= 0;
+    document.querySelector('#dealer-result').textContent= 0;
+   
     removeImage(playerImage ,dealerImage)
 }
 
 
 function removeImage(PlayerImage , dealerImage)
 {
-  for (i = 0 ; i< PlayerImage.length; i++)
-  PlayerImage[i].remove();
+  for (i = 0 ; i< PlayerImage.length; i++){
+    PlayerImage[i].remove();   
 
-  for (i = 0 ; i< activePlayerImage.length; i++)
-  dealerImage[i].remove();
+  }
+
+ 
+
+  for (i = 0 ; i< dealerImage.length; i++)
+  {
+    dealerImage[i].remove();   
+  }
+ 
+  PLAYER['score'] = 0;
+  DEALER['score'] = 0;
 }
 
 function randomCard()
@@ -98,7 +120,7 @@ function bustGame(activePlayer){
  {
     document.querySelector(activePlayer['scoreSpan']).textContent = 'bust'
     document.querySelector(activePlayer['scoreSpan']).style.color = 'red'
-    document.querySelector('#btn-cardGame-hit').disabled = true;
+    //document.querySelector('#btn-cardGame-hit').disabled = true;
  }
 
  
@@ -111,5 +133,78 @@ function dealerLogic(){
     showCard(DEALER,card) ;
     updateScore(card,DEALER);
     bustGame(DEALER);
+    
 }
 
+
+// function to count the match , to update player or dealer winer.
+function computerWinner()
+{
+    let winner ;
+    if(PLAYER['score'] <= 21){
+        // condition : higher score than dealer  or when dealer busts but your are winner.
+        if(PLAYER['score'] > DEALER['score'] || (DEALER['score']>21))
+           {
+            cardGame['win']++;
+            winner = PLAYER;
+           }
+        else if(PLAYER['score'] < DEALER['score']){
+            cardGame['loss']++;
+            winner = DEALER;
+        }
+        else if(PLAYER['score'] === DEALER['score']){
+            cardGame['draw']++;
+           winner= 'draw'
+        }
+     }
+    else if(PLAYER['score'] < DEALER['score'])
+    {
+        cardGame['loss']++;
+    winner = DEALER;
+      }
+else if(PLAYER['score'] > 21 && DEALER['score'] <=21 )
+    {
+        cardGame['loss']++;
+    winner = DEALER;
+   
+     }
+    else if(PLAYER['score'] > 21 && DEALER['score'] > 21 ){
+        cardGame['draw']++;
+    winner = 'draw'
+   
+     }
+ console.log('winner is',winner)  ;
+ return winner;   
+}
+
+
+function showResult(winner){
+    let message, messageColor;
+    if((winner === PLAYER))
+    {
+    message = 'PLayer WON'
+    document.querySelector('#player-win').textContent = cardGame['win'];
+    messageColor = 'green'
+    winSound.play();
+    }
+    else if(winner === DEALER)
+    {
+        message = 'Player Lost'
+        document.querySelector('#player-loss').textContent = cardGame['loss'];
+        messageColor = 'red'
+        lossSound.play();
+    }
+    else{
+        {
+            message = 'Player draw'
+            document.querySelector('#player-draw').textContent = cardGame['draw'];
+            messageColor = 'black'
+           
+            }
+    }
+document.querySelector('#blackjack-result').textContent = message;
+document.querySelector('#blackjack-result').style.color=messageColor;
+
+
+
+}
